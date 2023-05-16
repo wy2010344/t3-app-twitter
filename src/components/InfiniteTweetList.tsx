@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { env } from 'process';
+import { env } from '~/env.mjs';
 import type { FC } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ProfileImage from './ProfileImage';
@@ -35,7 +35,7 @@ const InfiniteTweetList: FC<InfiniteTweetListProps> = ({
   hasMore = false,
   fetchNewTweets
 }) => {
-  if (!env.VERCEL) {
+  if (process.env.NODE_ENV == "development") {
     tweets = [
       {
         "id": "d40c4d21-241c-43d1-89e0-ba3327253680",

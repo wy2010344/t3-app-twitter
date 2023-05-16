@@ -34,6 +34,7 @@ function Form() {
   const session = useSession()
   const [inputValue, setInputValue] = useState('');
   const areaRef = useRef<HTMLTextAreaElement>(null)
+  const trpcUtil = api.useContext()
   useEffect(() => {
     updateTextAreaSize(areaRef.current!)
   }, [inputValue])
@@ -41,6 +42,33 @@ function Form() {
     onSuccess(data, variables, context) {
       console.log(data)
       setInputValue('')
+      trpcUtil.tweet.infinitedFeed.setInfiniteData({}, oldData => {
+        if (oldData && oldData.pages[0] && session.data) {
+          return {
+            ...oldData,
+            pages: [
+              {
+                ...oldData.pages[0],
+                tweets: [
+                  {
+                    ...data,
+                    likeCount: 0,
+                    likedByMe: false,
+                    user: {
+                      id: session.data.user.id,
+                      name: session.data.user.name!,
+                      image: session.data.user.image!
+                    }
+                  },
+                  ...oldData.pages[0].tweets
+                ]
+              }
+            ],
+            ...oldData.pages.slice(1)
+          }
+        }
+        return undefined
+      })
     },
   })
 
