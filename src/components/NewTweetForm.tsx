@@ -11,6 +11,18 @@ function updateTextAreaSize(textarea?: HTMLTextAreaElement) {
   textarea.style.height = "0"
   textarea.style.height = `${textarea.scrollHeight}px`
 }
+/**
+ * {
+    "user": {
+        "name": "Jesse White",
+        "email": "wangyang2010344@foxmail.com",
+        "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+        "id": "clhol84z20000lg08f4clt7tt"
+    },
+    "expires": "2023-06-14T08:33:05.658Z"
+}
+ * @returns 
+ */
 const NewTweetForm: FC<NewTweetFormProps> = () => {
   const session = useSession()
   console.log('session', session)
