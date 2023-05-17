@@ -31,7 +31,6 @@ const Home: NextPage = () => {
         <NewTweetForm />
         {selectedTab == "Recent" && <RecentTweets />}
         {selectedTab == "Following" && <FollowingTweets />}
-        <RecentTweets />
       </header>
     </>
   );

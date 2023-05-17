@@ -16,6 +16,22 @@ const Profile: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
   id,
 }) => {
   const { data: profile } = api.profile.getById.useQuery({ id })
+
+  const trpcUtils = api.useContext()
+  const toggleFollow = api.profile.toggleFollow.useMutation({
+    onSuccess({ addedFollow }, variables, context) {
+      trpcUtils.profile.getById.setData({ id }, oldData => {
+        if (oldData) {
+          const countModifier = addedFollow ? 1 : -1
+          return {
+            ...oldData,
+            isFollowing: addedFollow,
+            followersCount: oldData.followersCount + countModifier
+          }
+        }
+      })
+    },
+  })
   if (profile) {
     return (<>
       <Head>
@@ -39,8 +55,11 @@ const Profile: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <FollowButton
           isFollowing={profile.isFollowing}
           userId={profile.id}
+          isLoading={toggleFollow.isLoading}
           onClick={() => {
-
+            toggleFollow.mutate({
+              userId: id
+            })
           }}
         />
       </header>

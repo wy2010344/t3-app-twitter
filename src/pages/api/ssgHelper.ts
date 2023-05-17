@@ -7,7 +7,8 @@ export function ssgHelper() {
     router: appRouter,
     transformer: SuperJSON,
     ctx: createInnerTRPCContext({
-      session: null
+      session: null,
+      revalidateSSG: null,
     })
   })
 }
