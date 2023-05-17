@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticPathsContext, GetStaticPropsContext, InferGetStaticPropsType, NextPage } from 'next';
 import type { FC } from 'react';
-import { ssgHelper } from '../api/ssgHelper';
+import { ssgHelper } from '../../server/api/ssgHelper';
 import { api } from '~/utils/api';
 import Head from 'next/head';
 import ErrorPage from 'next/error'
@@ -131,7 +131,7 @@ export default Profile;
 
 const pluralRules = new Intl.PluralRules()
 function getPlural(number: number, singular: string, plural: string) {
-  return pluralRules.select(number) == 'many' ? singular : plural
+  return pluralRules.select(number) == 'one' ? singular : plural
 }
 
 export const getStaticPaths: GetStaticPaths = () => {

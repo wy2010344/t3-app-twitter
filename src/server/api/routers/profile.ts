@@ -92,8 +92,8 @@ export const profileRouter = createTRPCRouter({
         }
       })
     }
-    ctx.revalidateSSG?.(`/profile/${userId}`)
-    ctx.revalidateSSG?.(`/profile/${currentUserId}`)
+    ctx.revalidateSSG?.(`/profiles/${userId}`)
+    ctx.revalidateSSG?.(`/profiles/${currentUserId}`)
     return {
       addedFollow: !existingFollow
     }

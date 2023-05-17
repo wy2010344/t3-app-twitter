@@ -38,7 +38,7 @@ const Home: NextPage = () => {
 
 
 function RecentTweets() {
-  const tweets = api.tweet.infinitedFeed.useInfiniteQuery(
+  const tweets = api.tweet.infiniteFeed.useInfiniteQuery(
     {},
     {
       getNextPageParam(lastPage) {
@@ -55,7 +55,7 @@ function RecentTweets() {
 }
 
 function FollowingTweets() {
-  const tweets = api.tweet.infinitedFeed.useInfiniteQuery(
+  const tweets = api.tweet.infiniteFeed.useInfiniteQuery(
     {
       onlyFollowing: true
     },

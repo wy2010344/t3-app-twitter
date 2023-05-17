@@ -36,48 +36,21 @@ const InfiniteTweetList: FC<InfiniteTweetListProps> = ({
   hasMore = false,
   fetchNewTweets
 }) => {
-  if (process.env.NODE_ENV == "development") {
-    tweets = [
-      {
-        "id": "d40c4d21-241c-43d1-89e0-ba3327253680",
-        "content": "ewafew",
-        "createdAt": new Date("2023-05-15T10:51:48.179Z"),
-        "likeCount": 0,
-        "user": {
-          "name": "Jesse White",
-          "id": "clhol84z20000lg08f4clt7tt",
-          "image": "https://cdn.discordapp.com/embed/avatars/0.png"
-        },
-        "likedByMe": false
-      },
-      {
-        "id": "c36371bc-c22e-45b7-b343-f1d3445e9113",
-        "content": "feafaew",
-        "createdAt": new Date("2023-05-15T10:49:06.861Z"),
-        "likeCount": 0,
-        "user": {
-          "name": "Jesse White",
-          "id": "clhol84z20000lg08f4clt7tt",
-          "image": "https://cdn.discordapp.com/embed/avatars/0.png"
-        },
-        "likedByMe": false
-      }
-    ]
-  }
   if (isLoading) return <LoadingSpinner />
   if (isError) return <h1>Error...</h1>
-  if (!tweets?.length) return <h2 className='my-4 text-center text-2xl text-gray-500'>No Tweets</h2>
-  console.log(tweets)
-  return (<ul >
-    <InfiniteScroll dataLength={tweets.length}
-      next={fetchNewTweets}
-      hasMore={hasMore}
-      loader={"Loading..."}>
-      {tweets.map(tweet => {
-        return <TweetCard key={tweet.id} {...tweet} />
-      })}
-    </InfiniteScroll>
-  </ul>);
+  if (tweets?.length) {
+    return (<ul >
+      <InfiniteScroll dataLength={tweets.length}
+        next={fetchNewTweets}
+        hasMore={hasMore}
+        loader={"Loading..."}>
+        {tweets.map(tweet => {
+          return <TweetCard key={tweet.id} {...tweet} />
+        })}
+      </InfiniteScroll>
+    </ul>);
+  }
+  return <h2 className='my-4 text-center text-2xl text-gray-500'>No Tweets</h2>
 }
 
 const dateTimeFormatter = new Intl.DateTimeFormat(undefined, {
@@ -98,7 +71,7 @@ function TweetCard({
       //导到全刷新
       // trpcUtils.tweet.infinitedFeed.invalidate()
 
-      const updateData: Parameters<typeof trpcUtils.tweet.infinitedFeed.setInfiniteData>[1] = (oldData) => {
+      const updateData: Parameters<typeof trpcUtils.tweet.infiniteFeed.setInfiniteData>[1] = (oldData) => {
         if (oldData) {
           const countModifier = addedLike ? 1 : -1
           return {
@@ -123,8 +96,8 @@ function TweetCard({
         }
         return undefined
       }
-      trpcUtils.tweet.infinitedFeed.setInfiniteData({}, updateData)
-      trpcUtils.tweet.infinitedFeed.setInfiniteData(
+      trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData)
+      trpcUtils.tweet.infiniteFeed.setInfiniteData(
         { onlyFollowing: true },
         updateData
       );

@@ -30,7 +30,7 @@ export const tweetRouter = createTRPCRouter({
     })
 
   }),
-  infinitedFeed: publicProcedure.input(z.object({
+  infiniteFeed: publicProcedure.input(z.object({
     onlyFollowing: z.boolean().optional(),
     limit: z.number().optional(),
     cursor: z.object({
