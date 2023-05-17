@@ -57,7 +57,9 @@ function RecentTweets() {
 
 function FollowingTweets() {
   const tweets = api.tweet.infinitedFeed.useInfiniteQuery(
-    {},
+    {
+      onlyFollowing: true
+    },
     {
       getNextPageParam(lastPage) {
         return lastPage.nextCursor

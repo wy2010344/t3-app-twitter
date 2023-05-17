@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { VscHeart, VscHeartFilled } from 'react-icons/vsc'
 import IconHoverEffect from './IconHoverEffect';
 import { api } from '~/utils/api';
+import LoadingSpinner from './LoadingSpinner';
 
 type Tweet = {
   id: string;
@@ -63,7 +64,7 @@ const InfiniteTweetList: FC<InfiniteTweetListProps> = ({
       }
     ]
   }
-  if (isLoading) return <h1>Loading...</h1>
+  if (isLoading) return <LoadingSpinner />
   if (isError) return <h1>Error...</h1>
   if (!tweets?.length) return <h2 className='my-4 text-center text-2xl text-gray-500'>No Tweets</h2>
   console.log(tweets)
@@ -96,7 +97,8 @@ function TweetCard({
     onSuccess({ addedLike }, variables, context) {
       //导到全刷新
       // trpcUtils.tweet.infinitedFeed.invalidate()
-      trpcUtils.tweet.infinitedFeed.setInfiniteData({}, function (oldData) {
+
+      const updateData: Parameters<typeof trpcUtils.tweet.infinitedFeed.setInfiniteData>[1] = (oldData) => {
         if (oldData) {
           const countModifier = addedLike ? 1 : -1
           return {
@@ -120,7 +122,16 @@ function TweetCard({
           }
         }
         return undefined
-      })
+      }
+      trpcUtils.tweet.infinitedFeed.setInfiniteData({}, updateData)
+      trpcUtils.tweet.infinitedFeed.setInfiniteData(
+        { onlyFollowing: true },
+        updateData
+      );
+      trpcUtils.tweet.infiniteProfileFeed.setInfiniteData(
+        { userId: user.id },
+        updateData
+      );
     },
   })
 
