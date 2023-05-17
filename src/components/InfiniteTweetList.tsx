@@ -93,23 +93,24 @@ function TweetCard({
 
   const trpcUtils = api.useContext() //一般在我的方法,setValue会随value一起传递下来.
   const toggleLike = api.tweet.toggleLike.useMutation({
-    onSuccess({ addLike }, variables, context) {
+    onSuccess({ addedLike }, variables, context) {
       //导到全刷新
       // trpcUtils.tweet.infinitedFeed.invalidate()
       trpcUtils.tweet.infinitedFeed.setInfiniteData({}, function (oldData) {
         if (oldData) {
-          const countModifier = addLike ? 1 : -1
+          const countModifier = addedLike ? 1 : -1
           return {
             ...oldData,
             page: oldData.pages.map(page => {
               return {
                 ...page,
                 tweets: page.tweets.map(tweet => {
+                  console.log(tweet.id, id)
                   if (tweet.id == id) {
                     return {
                       ...tweet,
                       likeCount: tweet.likeCount + countModifier,
-                      likedByMe: addLike
+                      likedByMe: addedLike
                     }
                   }
                   return tweet

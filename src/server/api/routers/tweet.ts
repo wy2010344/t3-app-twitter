@@ -8,6 +8,7 @@ import {
 
 export const tweetRouter = createTRPCRouter({
   infinitedFeed: publicProcedure.input(z.object({
+    onlyFollowing: z.boolean().optional(),
     limit: z.number().optional(),
     cursor: z.object({
       id: z.string(),
@@ -16,7 +17,8 @@ export const tweetRouter = createTRPCRouter({
   })).query(async ({
     input: {
       limit = 10,
-      cursor
+      cursor,
+      onlyFollowing = false
     },
     ctx
   }) => {
@@ -53,7 +55,16 @@ export const tweetRouter = createTRPCRouter({
             image: true
           }
         }
-      }
+      },
+      where: currentUserId && onlyFollowing ? {
+        user: {
+          followers: {
+            some: {
+              id: currentUserId
+            }
+          }
+        }
+      } : undefined
     })
     let nextCursor: typeof cursor | undefined
     if (data.length > limit) {
@@ -113,12 +124,12 @@ export const tweetRouter = createTRPCRouter({
           }
         })
         return {
-          addLike: false
+          addedLike: false
         }
       } else {
         await ctx.prisma.like.create({ data })
         return {
-          addLike: true
+          addedLike: true
         }
       }
     })
