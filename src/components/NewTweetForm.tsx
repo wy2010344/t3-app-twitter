@@ -42,7 +42,7 @@ function Form() {
     onSuccess(data, variables, context) {
       console.log(data)
       setInputValue('')
-      trpcUtil.tweet.infinitedFeed.setInfiniteData({}, oldData => {
+      trpcUtil.tweet.infiniteFeed.setInfiniteData({}, oldData => {
         if (oldData && oldData.pages[0] && session.data) {
           return {
             ...oldData,

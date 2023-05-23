@@ -21,6 +21,16 @@ const SideNav: FC<SideNavProps> = () => {
           </IconHoverEffect>
         </Link>
       </li>
+      <li>
+        <Link href="/todos/all">
+          <IconHoverEffect>
+            <span className='flex items-center gap-4'>
+              <VscHome className='h-8 w-8' />
+              <span className='hidden text-lg md:inline'>Home</span>
+            </span>
+          </IconHoverEffect>
+        </Link>
+      </li>
       {user && <li>
         <Link href={`/profiles/${user.id}`}>
           <IconHoverEffect>

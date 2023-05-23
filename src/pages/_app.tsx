@@ -1,4 +1,4 @@
-import { type AppType } from "next/app";
+import { AppProps, type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
@@ -7,6 +7,8 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import Head from "next/head";
 import SideNav from "~/components/SideNav";
+import { I18NProvider } from "next/dist/server/future/helpers/i18n-provider";
+import { SSRConfig, appWithTranslation } from "next-i18next";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -22,7 +24,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <SideNav />
         <div className="min-h-screen flex-grow border-x">
           <Component {...pageProps} />
-
         </div>
       </div>
     </SessionProvider>
